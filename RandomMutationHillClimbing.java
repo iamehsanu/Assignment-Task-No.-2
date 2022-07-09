@@ -22,6 +22,8 @@ public class RandomMutationHillClimbing {
         this.ModuledependecyGraph=mdg;
         this.noofIterations=Iterationsnum;
     }
+
+    //Question No.1
     public boolean isValidMDG() {
         int noOfNodes=ModuledependecyGraph.length;
         //To check if the matix representation of MDG is Square or not
@@ -58,9 +60,55 @@ public class RandomMutationHillClimbing {
         return true;
     }
 
+    //Question No.2
+    //Initial Clustering Arrangement made by
+    public Vector<Integer> getInitialStartingPoint()
+    {
+        Vector<Integer> startingPoint=new Vector<Integer>();
+        for (int i=1;i<=this.ModuledependecyGraph.length;i++)
+        {
+            startingPoint.add(i);
+        }
+        return startingPoint;
+    }
+
+    //Question No.3
+    public int getFitnessValue(Vector<Integer> clusters,int mdg[][])
+    {
+        int evm=0;
+        int c1,c2;
+        for (int i=0;i<this.ModuledependecyGraph.length-1;i++)
+        {
+            for(int j=i+1;j<this.ModuledependecyGraph.length;j++)
+            {
+                c1=clusters.get(i);
+                c2=clusters.get(j);
+                if (c1==c2)
+                {
+                    evm=evm+2*(this.ModuledependecyGraph[i][j])-1;
+                }
+            }
+        }
+
+        return evm;
+    }
+    public static int UI(int lower,int upper)
+    {
+        Random random = new Random();
+        random.setSeed(System.nanoTime());
+        return random.nextInt(upper - lower) + lower;
+    }
+
+
+    
     public void AlgorithmExecution()
     {
-        System.out.println(isValidMDG());
+        if(isValidMDG()==false)
+        {
+            throw new IllegalArgumentException("MDG in In-Valid Format");
+        }
+        Vector<Integer> startingPoint=getInitialStartingPoint();
+
     }
     //Pathname="C:\\Users\\DELL\\IdeaProjects\\untitled\\src\\com\\company\\file.txt"
     //To read the MDG from the file
@@ -113,6 +161,8 @@ public class RandomMutationHillClimbing {
         int [][] mdg = ReadMDGfromFile("C:\\Users\\DELL\\IdeaProjects\\untitled\\src\\com\\company\\file.txt");
         RandomMutationHillClimbing obj =new RandomMutationHillClimbing(10,mdg);
         obj.AlgorithmExecution();
+
+
 
     }
 
