@@ -8,7 +8,7 @@ public class RandomMutationHillClimbing {
 
     //The 2-D matrix to store the graph
     private int[][] ModuledependecyGraph;
-    //The Iterations algo is to be run on the dataSet
+    //The No. of Iterations algo is to be run on the dataSet
     private int noofIterations;
 
     //Default Constructor Not allowed
@@ -61,7 +61,7 @@ public class RandomMutationHillClimbing {
     }
 
     //Question No.2
-    //Initial Clustering Arrangement made by
+    //Initial Clustering Arrangement with each Module in Separate Cluster
     public Vector<Integer> getInitialStartingPoint()
     {
         Vector<Integer> startingPoint=new Vector<Integer>();
@@ -73,6 +73,7 @@ public class RandomMutationHillClimbing {
     }
 
     //Question No.3
+    //To get the Fitness Value of the Clustering based on the EVM Fitness given in Manual
     public int getFitnessValue(Vector<Integer> clusters)
     {
         int evm=0;
@@ -92,6 +93,7 @@ public class RandomMutationHillClimbing {
 
         return evm;
     }
+    //To get a random number between the range (lower:inclusive,upper:exclusive)
     public static int UI(int lower,int upper)
     {
         Random random = new Random();
@@ -100,6 +102,7 @@ public class RandomMutationHillClimbing {
     }
 
     //Question No. 4
+    //To change the Given cluster randomly and return a new Clustering Arrangement
     public Vector<Integer> smallChangeOperator(Vector<Integer> clusters) {
 
         int index=UI(0,this.ModuledependecyGraph.length);
@@ -114,6 +117,7 @@ public class RandomMutationHillClimbing {
     }
 
     //Question No. 5
+    //Munch Algorithm on the Given Module Dependency Graph
     public Vector<Integer> AlgorithmExecution()
     {
         if(isValidMDG()==false)
@@ -135,7 +139,7 @@ public class RandomMutationHillClimbing {
         }
             return bestClusterArrangement;
     }
-    //Pathname="C:\\Users\\DELL\\IdeaProjects\\untitled\\src\\com\\company\\file.txt"
+
     //To read the MDG from the file
     public static int[][] ReadMDGfromFile(String Pathname)
     {
@@ -182,16 +186,23 @@ public class RandomMutationHillClimbing {
 
     public static void main(String[] args)
     {
-
-        int [][] mdg = ReadMDGfromFile("C:\\Users\\DELL\\IdeaProjects\\untitled\\src\\com\\company\\file.txt");
-        RandomMutationHillClimbing obj =new RandomMutationHillClimbing(30000,mdg);
-        Vector<Integer> res=obj.AlgorithmExecution();
-        for(int i:res)
-        {
-            System.out.print(i+" ");
+        try {
+            int[][] mdg = ReadMDGfromFile("C:\\Users\\DELL\\IdeaProjects\\untitled\\src\\com\\company\\file.txt");
+            RandomMutationHillClimbing obj = new RandomMutationHillClimbing(30000, mdg);
+            Vector<Integer> res = obj.AlgorithmExecution();
+            for (int i : res) {
+                System.out.print(i + " ");
+            }
+            System.out.print("\nThe Resultings Cluster's Fitness Value is " + obj.getFitnessValue(res));
         }
-        System.out.print("\nThe Resultings Cluster's Fitness Value is "+obj.getFitnessValue(res));
-
+        catch(IllegalArgumentException e)
+        {
+            System.out.println(e.getMessage());
+        }
+        catch(Exception e)
+        {
+            System.out.println("OOPs !!  Something wrong happened : ");
+        }
     }
 
 
