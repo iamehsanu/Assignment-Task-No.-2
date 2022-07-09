@@ -73,7 +73,7 @@ public class RandomMutationHillClimbing {
     }
 
     //Question No.3
-    public int getFitnessValue(Vector<Integer> clusters,int mdg[][])
+    public int getFitnessValue(Vector<Integer> clusters)
     {
         int evm=0;
         int c1,c2;
@@ -99,16 +99,41 @@ public class RandomMutationHillClimbing {
         return random.nextInt(upper - lower) + lower;
     }
 
+    //Question No. 4
+    public Vector<Integer> smallChangeOperator(Vector<Integer> clusters) {
 
-    
-    public void AlgorithmExecution()
+        int index=UI(0,this.ModuledependecyGraph.length);
+        int currentClusterval=clusters.get(index);
+        int newclusterval=UI(1,this.ModuledependecyGraph.length+1);
+        while(newclusterval==currentClusterval)
+        {
+            newclusterval=UI(1,this.ModuledependecyGraph.length+1);
+        }
+        clusters.set(index,newclusterval);
+        return clusters;
+    }
+
+    //Question No. 5
+    public Vector<Integer> AlgorithmExecution()
     {
         if(isValidMDG()==false)
         {
             throw new IllegalArgumentException("MDG in In-Valid Format");
         }
-        Vector<Integer> startingPoint=getInitialStartingPoint();
-
+        Vector<Integer> bestClusterArrangement=getInitialStartingPoint();
+        Vector<Integer> newClusterArrangement;
+        int oldfitness,newfitness;
+        for(int i=0;i<this.noofIterations;i++)
+        {
+            newClusterArrangement=smallChangeOperator(bestClusterArrangement);
+            oldfitness=getFitnessValue(bestClusterArrangement);
+            newfitness=getFitnessValue(newClusterArrangement);
+            if(newfitness>oldfitness)
+            {
+                bestClusterArrangement=newClusterArrangement;
+            }
+        }
+            return bestClusterArrangement;
     }
     //Pathname="C:\\Users\\DELL\\IdeaProjects\\untitled\\src\\com\\company\\file.txt"
     //To read the MDG from the file
@@ -159,10 +184,13 @@ public class RandomMutationHillClimbing {
     {
 
         int [][] mdg = ReadMDGfromFile("C:\\Users\\DELL\\IdeaProjects\\untitled\\src\\com\\company\\file.txt");
-        RandomMutationHillClimbing obj =new RandomMutationHillClimbing(10,mdg);
-        obj.AlgorithmExecution();
-
-
+        RandomMutationHillClimbing obj =new RandomMutationHillClimbing(30000,mdg);
+        Vector<Integer> res=obj.AlgorithmExecution();
+        for(int i:res)
+        {
+            System.out.print(i+" ");
+        }
+        System.out.print("\nThe Resultings Cluster's Fitness Value is "+obj.getFitnessValue(res));
 
     }
 
