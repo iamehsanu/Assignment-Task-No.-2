@@ -1,4 +1,4 @@
-
+//The below line needs to be altered or removed acc. to the PC
 package com.company;
 
 import java.util.*;
@@ -118,20 +118,28 @@ public class RandomMutationHillClimbing {
 
     //Question No. 5
     //Munch Algorithm on the Given Module Dependency Graph
-    public Vector<Integer> AlgorithmExecution()
+    public  static Vector<Integer> AlgorithmExecution(int noofitrs,int[][] mdg)
     {
-        if(isValidMDG()==false)
+        RandomMutationHillClimbing obj = new RandomMutationHillClimbing(noofitrs, mdg);
+
+
+        if(obj.isValidMDG()==false)
         {
             throw new IllegalArgumentException("MDG in In-Valid Format");
         }
-        Vector<Integer> bestClusterArrangement=getInitialStartingPoint();
+        if (noofitrs<1)
+        {
+            throw new IllegalArgumentException("Fitness function calls less than 1");
+        }
+
+        Vector<Integer> bestClusterArrangement=obj.getInitialStartingPoint();
         Vector<Integer> newClusterArrangement;
         int oldfitness,newfitness;
-        for(int i=0;i<this.noofIterations;i++)
+        for(int i=0;i< obj.noofIterations;i++)
         {
-            newClusterArrangement=smallChangeOperator(bestClusterArrangement);
-            oldfitness=getFitnessValue(bestClusterArrangement);
-            newfitness=getFitnessValue(newClusterArrangement);
+            newClusterArrangement=obj.smallChangeOperator(bestClusterArrangement);
+            oldfitness=obj.getFitnessValue(bestClusterArrangement);
+            newfitness=obj.getFitnessValue(newClusterArrangement);
             if(newfitness>oldfitness)
             {
                 bestClusterArrangement=newClusterArrangement;
@@ -187,14 +195,18 @@ public class RandomMutationHillClimbing {
     public static void main(String[] args)
     {
         try {
+            int iterationsnum=1000;
             int[][] mdg = ReadMDGfromFile("C:\\Users\\DELL\\IdeaProjects\\untitled\\src\\com\\company\\file.txt");
-            RandomMutationHillClimbing obj = new RandomMutationHillClimbing(30000, mdg);
-            Vector<Integer> res = obj.AlgorithmExecution();
+            Vector<Integer> res=AlgorithmExecution(iterationsnum,mdg);
             for (int i : res) {
                 System.out.print(i + " ");
             }
-            System.out.print("\nThe Resultings Cluster's Fitness Value is " + obj.getFitnessValue(res));
+            RandomMutationHillClimbing obj = new RandomMutationHillClimbing(iterationsnum, mdg);
+
+            System.out.print("\nThe Resultings Cluster's Fitness Value is " +obj.getFitnessValue(res));
+
         }
+
         catch(IllegalArgumentException e)
         {
             System.out.println(e.getMessage());
